@@ -1,0 +1,10 @@
+@CHARSET "ISO-8859-1";
+
+#scene{
+	position: absolute;
+	width:4096px;
+	height:2037px;
+	background-image: url(../img/forest.jpg);
+	top: 0;
+	left: 0;
+}
