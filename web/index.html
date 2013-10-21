@@ -1,56 +1,35 @@
-<!DOCTYPE HTML>
-
+<!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8"/>
-	<link rel="stylesheet" type="text/css" href="//localhost/CoursWeb-static/css/base.css"/>
-	<link rel="stylesheet" type="text/css" href="//localhost/CoursWeb-static/css/gui.css"/>
-	<link rel="stylesheet" type="text/css" href="//localhost/CoursWeb-static/css/scene.css"/>
-	<link rel="stylesheet" type="text/css" href="//localhost/CoursWeb-static/css/infos.css"/>
+<meta charset="UTF-8"/>
 
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="/CoursWeb-static/css/base.css"/>
+<link rel="stylesheet" type="text/css" href="/CoursWeb-static/css/scene.css"/>
+<link rel="stylesheet" type="text/css" href="/CoursWeb-static/css/gui.css"/>
+<link rel="stylesheet" type="text/css" href="/CoursWeb-static/css/infos.css"/>
+
+<script type="text/javascript" src="/CoursWeb-static/js/Page.js"></script>
+<script type="text/javascript" src="/CoursWeb-static/js/Window.js"></script>
+<script type="text/javascript" src="/CoursWeb-static/js/main.js"></script>
+<script type="text/javascript" src="/CoursWeb-static/js/InfoPage.js"></script>
+
+
+<title>Cours Web</title>
 </head>
-<body>
-
-<div id="ecran">
-
-	<div id="scene">
+<body onload="start()">
+<div id="screen">
+	<div class="scene-view">
+		<div class="scene">
 		
-		<div id="joueur" class="personnage joueur">Personnage</div>
-		<div id="ennemi1" class="personnage ennemiType1">ennemi 1</div>
-		<div id="ennemi2" class="personnage ennemiType1">ennemi 2</div>
-	
-	</div>
-	
-	<div id="FenetreProfil" class="fenetre">
-		
-		<ul id="menu">
-		  <li>INFOS</li>
-		  <li>ÉQUIPEMENT</li>
-		  <li>STATISTIQUES</li>
-		</ul>
-		
-		
-		<div id="affichage">
-			<div class="contenu">
-				<div id="nomPersonnage">ULRICH</div>
-				<div id="classePersonnage">SAMOURAI</div>
-				<div id="classePersonnage">**</div>
-				<div id="imagePersonnage"><img></div>
-			</div>
-			<table>
-				<tbody>
-					<tr><td>XP :</td><td class="XP">400</td></tr>
-					<tr><td>HP :</td><td class="HP">100</td></tr>
-					<tr><td>PUISSANCE :</td><td class="Puissance">12</td></tr>
-				</tbody>
-			</table>
 		</div>
+	</div>
+	<div id="gui">
 		
 	</div>
-
 </div>
-
-
 </body>
-
 </html>

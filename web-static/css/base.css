@@ -1,17 +1,31 @@
-@CHARSET "ISO-8859-1";
-
-body{
-background-color:black;
+@font-face{
+	font-family: gunship-condensed;
+	src: url(../font/gun4fc.ttf);
 }
-
-#ecran{
-	background-color:green;
+@font-face{
+	font-family: gunship;
+	src: url(../font/gun4f.ttf);
+}
+@font-face{
+	font-family: gunship-italic;
+	src: url(../font/gun4fi.ttf);
+}
+html, body{
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+	background: black;
+}
+#screen{
 	position: absolute;
-	width:1000px;
-	height:600px;
-	top:50%;
-	left:50%;
-	margin-left:-500px;
-	margin-top:-300px;
-	overflow: hidden;
+	width: 1024px;
+	height: 600px;
+	background: white;
+	top: 50%;
+	left: 50%;
+	margin-left: -512px;
+	margin-top: -300px;
+	font-family: gunship-condensed;
+	font-size: 9px;
 }
