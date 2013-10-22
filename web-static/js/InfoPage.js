@@ -31,19 +31,16 @@ InfoPage.prototype = new Page();
 
 InfoPage.prototype.refreshData = function(playerData){
 	for(var id in playerData){
-		if(id == "playerName"){
+		if(id == "name"){
 			$(".player-name").html(playerData[id]);
-		}else if(id == "playerTitle"){
+		}else if(id == "title"){
 			$(".player-title").html(playerData[id]);
-		}else if(id ==  "playerProgress"){
+		}else if(id ==  "progress"){
 			//$(".player-progress-indic").css('width', (playerData[id] * 100));
 			$(".player-progress-indic").css('width', (playerData[id] * 100)+"%");
 		}else{
 			this.attributeList[id].html(playerData[id]).effect('pulsate',{times:5, duration: 300});
 		}
-		//playerName: "Ulrich",
-		//playerTitle: "Samouraï",
-		//playerProgress: 0.6
 	}
 };
 
