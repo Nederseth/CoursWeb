@@ -29,8 +29,7 @@ Window.prototype.addPage = function(title, page){
 	// li.addEventListener("click", function(){...})
 	//...
 	var self = this;
-	
-	page.setVisible(false);
+	//page.setVisible(false);
 	this.content.appendChild(page.root);
 	
 	var li =  document.createElement("li");

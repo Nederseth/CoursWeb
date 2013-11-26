@@ -1,7 +1,6 @@
-var Camera = function(scene, player){
+var Camera = function(player){
 	var self = this;
-	
-	this.scene = scene;
+
 	this.player = player;
 	
 	this.x = 0;
@@ -76,5 +75,9 @@ Camera.prototype.setViewPosition = function(x, y){
 	// TODO
 	this.x = x;
 	this.y = y;
-	this.scene.css({left: this.x+"px", top: this.y+"px"});
+	//this.scene.css({left: this.x+"px", top: this.y+"px"});
+};
+
+Camera.prototype.render = function(g){
+	g.translate(this.x,this.y);
 };

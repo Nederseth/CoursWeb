@@ -5,7 +5,44 @@
 	top: 20px;
 	left: 40px;
 	border: white solid 2px;
+	opacity: 0;
+	-webkit-transform : scale(1,0) /*rotate3d(0,1,0,40deg)*/;
+	-webkit-transition : all 0.25s;
+	-webkit-transform-origin : 0 0;
+	/*-webkit-transform-style : preserve-3d;*/
 }
+
+@-webkit-keyframes rotateWindow{
+	from{
+		-webkit-transform:rotate3d(0,1,0,-40deg);
+		-webkit-transform-style : preserve-3d;
+	}
+	50%{
+		-webkit-transform:rotate3d(0,1,0,40deg);
+		-webkit-transform-style : preserve-3d;
+	}
+	to{
+		-webkit-transform:rotate3d(0,1,0,-40deg);
+		-webkit-transform-style : preserve-3d;
+	}
+}
+
+.window.visible{
+	position: absolute;
+	height: 350px;
+	background: rgba(100, 100, 255, 0.8);
+	border: white solid 2px;
+	opacity: 1;
+	-webkit-transform :/* rotate(0deg)*/ scale(1,1) /*rotate3d(0,1,0,40deg)*/;
+	-webkit-transition : all 0.25s;
+	/*-webkit-animation: rotateWindow 120s infinite linear;*/
+}
+
+.window.visible *{
+	/*-webkit-transform : translate3d(0,0,2px);
+	-webkit-transform-style : preserve-3d;*/
+}
+
 .window .menu{
 	height: 100%;
 	width: 160px;

@@ -1,11 +1,4 @@
-var Character = function(parent){
-	if(typeof(parent) == "undefined"){
-		return;
-	}
-	this.parent = parent;
-	this.$elm = $("<div>").addClass("character");
-
-	this.parent.append(this.$elm);
+var Character = function(){
 
     this.revertDirection = false;
 
@@ -43,7 +36,7 @@ Character.prototype.setSprite = function(anim, onComplete){
 Character.prototype.setPosition = function(x, y){
 	this.x = parseInt(x);
 	this.y = parseInt(y);
-	this.$elm.css({left: this.x+"px", top: this.y+"px"});
+	//this.$elm.css({left: this.x+"px", top: this.y+"px"});
 	
 	for(var i in this.positionListenerList){
 		this.positionListenerList[i](this.x,this.y);

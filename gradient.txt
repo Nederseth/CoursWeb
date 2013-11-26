@@ -1,0 +1,28 @@
+		var g = this.graphics;
+		g.save();
+		g.translate(300, 100);
+		var gradient = g.createLinearGradient(200, 0, 0, 200);
+		gradient.addColorStop(0, "#F00");
+		gradient.addColorStop(0.7, "#F0F");
+		gradient.addColorStop(1, "#0F0");
+
+		g.fillStyle = gradient;
+		g.fillRect(0, 0, 400, 200);
+		g.restore();
+
+		g.save();
+		g.translate(300, 350);
+		var angle = now / 1000;
+		var xVariation = 50; 
+		var x = 200 + parseInt(Math.cos(angle) * xVariation)
+		var gradient = g.createRadialGradient(x, 100 + parseInt(Math.sin(now / 1000) * 50), 0, 200, 100, 100);
+		gradient.addColorStop(0, "#F00");
+		gradient.addColorStop(0.7, "#F0F");
+		gradient.addColorStop(1, "#0F0");
+
+		g.fillStyle = gradient;
+		g.fillRect(0, 0, 400, 200);
+		g.restore();
+
+
+http://techtrends.eu/wp-content/uploads/2010/02/HTML5_Canvas_Cheat_Sheet1.png
