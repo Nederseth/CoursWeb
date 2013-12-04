@@ -1,4 +1,4 @@
-var Player = function(){
+var Player = function(assetManager){
 	var self = this;
 	Character.call(this);
 	
@@ -18,7 +18,17 @@ var Player = function(){
 		x: 600,
 		y: 200
 	};
+	
+	this.centerX = 64;
+	this.centerY = 120;
 
+	this.createSprite("idle", assetManager.getImage("player-idle"), 2048, 256, 16, 2, true);
+	this.createSprite("attack", assetManager.getImage("player-attack"), 2048, 128, 16, 1, false);
+	this.createSprite("move", assetManager.getImage("player-move"), 896, 128, 7, 1, true);
+	
+	for(var i in this.spriteList){
+		this.spriteList[i].setCenter(this.centerX,this.centerY);
+	}
 	/*this.spriteList = {
 		"idle-left": new Sprite(this.$elm, "idle-left", "/CoursWeb-static/img/sprite/revert-idle-1-2-1.png", 2048, 256, 16, 2, true),
 		"idle-right": new Sprite(this.$elm, "idle-right", "/CoursWeb-static/img/sprite/idle-1-2-1.png", 2048, 256, 16, 2, true),
@@ -26,14 +36,13 @@ var Player = function(){
 		"attack-right": new Sprite(this.$elm, "attack-right", "/CoursWeb-static/img/sprite/attack-1-2-1.png", 2048, 128, 16, 1, false),
 		"move-left": new Sprite(this.$elm, "move-left", "/CoursWeb-static/img/sprite/revert-move-1-2-1.png", 896, 128, 7, 1, true),
 		"move-right": new Sprite(this.$elm, "move-right", "/CoursWeb-static/img/sprite/move-1-2-1.png", 896, 128, 7, 1, true)
-	};
+	};*/
 
-	this.spriteList["move-left"].frameCount = 6;
-	this.spriteList["move-right"].frameCount = 6;
+	this.spriteList["move"].frameCount = 6;
 	this.revertDirection = false;
-	this.setSprite("idle");*/
+	this.setSprite("idle");
 };
-Player.MIN_Y = 1455;
+Player.MIN_Y = 1500;
 Player.MAX_Y = 1920;
 Player.MIN_SCALE = 0.5;
 Player.MAX_SCALE = 1.3;
@@ -80,14 +89,16 @@ Player.prototype.update = function(deltaTime){
 				case "40": /*bas*/
 				move.y = this.speed.y;
 				break;
+				/*case "96":
+				this.setSprite ("attack");*/
 			}
 		}
 	}
 	this.move(move.x * deltaTime * this.scale, move.y * deltaTime * this.scale);
 	if(move.x != 0 || move.y != 0){
-		//this.setSprite ("move");
+		this.setSprite ("move");
 	}else{
-		//this.setSprite ("idle");
+		this.setSprite ("idle");
 	}
 	
 	// Q (113|81)
@@ -105,6 +116,16 @@ Player.prototype.update = function(deltaTime){
 
 Player.prototype.onKeyDown = function(k){
 	this.keyList[k] = true;
+	
+	if(k==32){
+		this.setSprite ("attack");
+		for(var idx in game.mobList){
+			var distance = Math.sqrt(Math.pow(this.x-game.mobList[idx].x,2)+Math.pow(this.y-game.mobList[idx].y,2));
+			if(distance < 50){
+				game.mobList[idx].setSprite("death");
+			}
+		}
+	}
 };
 Player.prototype.onKeyUp = function(k){
 	this.keyList[k] = false;

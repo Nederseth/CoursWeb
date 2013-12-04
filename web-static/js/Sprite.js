@@ -1,4 +1,4 @@
-var Sprite = function(parent, id, url, width, height, colCount, rowCount, loop){
+var Sprite = function(id, img, width, height, colCount, rowCount, loop){
 	this.id = id;
 	this.loop = loop;
 	this.parent = parent;
@@ -18,30 +18,15 @@ var Sprite = function(parent, id, url, width, height, colCount, rowCount, loop){
 	this.x = 0;
 	this.y = 0;
 	
-	this.$elm = $("<div>").css({
-		position: "absolute",
-		top: "0px",
-		overflow: "hidden",
-		left: "0px"
-	});
-	this.parent.append(this.$elm);
 	this.hide();
 	this.onAnimationComplete = false;
 	
-	this.$img = $("<img>").css({
-		position: "absolute",
-		left: "0",
-		top: "0",
-		width: this.imgWidth + 'px',
-		height: this.imgHeight + 'px'
-	});
+	this.image = img;
+	
 	this.width = Math.round(this.imgWidth / this.colCount);
 	this.height = Math.round(this.imgHeight / this.rowCount);
-	this.$elm.width(this.width).height(this.height).append(this.$img);
-	
-	if(url){
-		this.setUrl(url);
-	}
+	//this.$elm.width(this.width).height(this.height).append(this.$img);
+
 };
 
 Sprite.prototype.setUrl = function(url){
@@ -62,19 +47,19 @@ Sprite.prototype.setCenter = function(x, y){
 	this.refreshPosition();
 };
 Sprite.prototype.refreshPosition = function(){
-	this.$elm[0].style.left = Math.round(this.x - this.scale * this.centerX) + "px";
-	this.$elm[0].style.top = Math.round(this.y - this.scale * this.centerY) + "px";
+	/*this.$elm[0].style.left = Math.round(this.x - this.scale * this.centerX) + "px";
+	this.$elm[0].style.top = Math.round(this.y - this.scale * this.centerY) + "px";*/
 };
 Sprite.prototype.show = function(type, options){
 	if(this.loop){
 		this.currentFrame = 0;
 		this.play();
 	}
-	this.$elm.show(type, options);
+	//this.$elm.show(type, options);
 };
 Sprite.prototype.hide = function(hideType){
 	this.stop();
-	this.$elm.hide(hideType);
+	//this.$elm.hide(hideType);
 };
 Sprite.prototype.play = function(onComplete){
 	var _this = this;
@@ -97,7 +82,7 @@ Sprite.prototype.play = function(onComplete){
 Sprite.prototype.resetAnim = function(){
 	this.stop();
 	this.currentFrame = 0;
-	this.refreshDisplay();
+	//this.render();
 };
 Sprite.prototype.stop = function(){
 	if(this.player){
@@ -117,23 +102,43 @@ Sprite.prototype.nextFrame = function(frames){
 			this.currentFrame = this.frameCount - 1;
 		}
 	}
-	this.refreshDisplay();
+	//this.render();
 	if(this.currentFrame == this.frameCount - 1 && !this.loop && this.onAnimationComplete){
 		this.onAnimationComplete(this);
 		this.onAnimationComplete = false;
 	}
 };
-Sprite.prototype.refreshDisplay = function(){
+Sprite.prototype.render = function(g,revertDirection){
 	var frame = this.currentFrame;
 	if(this.invertAnim){
 		frame = this.frameCount - this.currentFrame - 1;
 	}
-	// TODO ???
+	
 	var row = Math.floor(frame/this.colCount);
 	var col = frame%this.colCount;
-	this.$img.css({left: -Math.round((this.width*this.scale*col))+"px"});
-	this.$img.css({top: -Math.round((this.height*this.scale*row))+"px"});
-	//console.log(-this.$elm.height()*row);
+	
+	if(this.invert){
+		row = this.rowCount - row - 1;
+		col = this.colCount - col - 1;
+	}
+	
+	//this.$img.css({left: -Math.round((this.width*this.scale*col))+"px"});
+	//this.$img.css({top: -Math.round((this.height*this.scale*row))+"px"});
+	var imgLeft = Math.round((this.width*/*this.scale**/col));
+	var imgTop = Math.round((this.height*/*this.scale**/row));
+
+	
+	if(revertDirection){
+		g.scale(-this.scale,this.scale);
+	}else{
+		g.scale(this.scale,this.scale);
+	}
+	g.translate(-this.centerX,-this.centerY);
+	g.drawImage(this.image,imgLeft,imgTop,this.width,this.height,0,0,this.width,this.height);
+	
+	//console.log(this.width);
+	//g.drawImage(this.image,0,0);
+	
 	
 };
 Sprite.prototype.setFrameRate = function(frameRate){
@@ -143,11 +148,11 @@ Sprite.prototype.setFrameRate = function(frameRate){
 Sprite.prototype.setScale = function(scale){
 	if(this.scale != scale){
 		this.scale = scale;
-		this.$elm.width(Math.round(this.width * this.scale));
-		this.$elm.height(Math.round(this.height * this.scale));
-		this.$img.width(Math.round(this.width * this.scale * this.colCount));
-		this.$img.height(Math.round(this.height * this.scale * this.rowCount));
-		this.refreshDisplay();
+		//this.$elm.width(Math.round(this.width * this.scale));
+		//this.$elm.height(Math.round(this.height * this.scale));
+		//this.$img.width(Math.round(this.width * this.scale * this.colCount));
+		//this.$img.height(Math.round(this.height * this.scale * this.rowCount));
+		//this.render();
 		this.refreshPosition();
 	}
 };

@@ -1,9 +1,12 @@
 var Game = function(){
 	var self = this;
-	var sleep = 1;
+	var sleep = 0;
 	this.localTime = 0;
 	this.globalTime = 0;
 
+	this.loadEndTime;
+	this.alphaScene = 0;
+	
 	//var win = new Window('main-window', document.getElementById("gui"));
 	var win = new Window('main-window', document.getElementById("gui"));
 	
@@ -44,12 +47,6 @@ var Game = function(){
 	
 	this.graphics.strokeStyle = "blue";
 	this.graphics.strokeRect(this.canvas.width/2 -50, this.canvas.height/2 -50,100,100);
-
-	player = new Player();
-	camera = new Camera(player);
-
-	player.setPosition(3530, 1770);
-	player.init();
 	
 	var sleep = 2;
 	var baseURL = "/CoursWeb-static/img/getImage.php?url=";
@@ -68,6 +65,32 @@ var Game = function(){
 	this.assetManager = new AssetManager();
 	this.assetManager.startLoading(imageList, soundList);
 
+	player = new Player(this.assetManager);
+	ennemi = new Ennemy(this.assetManager);
+	camera = new Camera(player);
+
+	player.setPosition(3530, 1770);
+	player.init();
+	
+	this.mobList = [];
+	
+	var handlerTimeOut = function(){
+		console.log("New Kankrelat !");
+		self.popMob();
+		if(self.mobList.length < 200){
+			setTimeout(handlerTimeOut,500);
+		}
+	}
+	
+	/*var handlerInterval = function(){
+		console.log("Hello Interval");
+	}*/
+	
+	setTimeout(handlerTimeOut,500);
+	/*setInterval(function(){
+		console.log("OK");
+	},2000);*/
+	
 	requestAnimFrame(
 		function loop() {
 			self.mainLoop();
@@ -75,6 +98,16 @@ var Game = function(){
 		}					
 	);
 };
+
+Game.prototype.popMob = function(){
+	var En = new Ennemy(this.assetManager);
+	this.mobList.push(En);
+	
+	this.mobList.sort(function(a,b){
+		return a.y - b.y;
+	});
+}
+
 Game.prototype.mainLoop = function(){
 	var now = Date.now();
 	var globalTimeDelta = now - this.globalTime;
@@ -86,14 +119,83 @@ Game.prototype.mainLoop = function(){
 	
 	this.graphics.clearRect(0,0,this.canvas.width,this.canvas.height);
 	
-	if(!this.assetManager.isDoneLoading()){
+	if(this.assetManager.isDoneLoading()){
+		if(!this.loadEndTime){
+			this.loadEndTime = Date.now();
+			//console.log(this.globalTime +" = "+ this.localTime);
+		}
+	}
+	
+	if(this.alphaScene < 1){
 		this.assetManager.renderLoadingProgress(this.graphics);
-	}else{
+	}
+	
+	if(this.loadEndTime){
 		this.graphics.save();
+		this.alphaScene = tween(0,1,this.loadEndTime,2000, "easeInOutSine");
+		this.graphics.globalAlpha = this.alphaScene;
 		camera.render(this.graphics);
 		this.graphics.drawImage(this.assetManager.getImage("background"),0,0);
+		
+		player.update(localTimeDelta / 1000);
+		//player.render(this.graphics);
+		
+		var playerFlag = false;
+		for(var idx in this.mobList){
+
+			if(this.mobList[idx].y < player.y)
+				this.mobList[idx].render(this.graphics);
+			else{
+				if(!playerFlag){
+					player.render(this.graphics);
+					playerFlag = true;
+				}
+				this.mobList[idx].render(this.graphics);
+			}
+		}
+		if(!playerFlag){
+			player.render(this.graphics);
+			playerFlag = true;
+		}
+		
 		this.graphics.restore();
 	}
 	
-	player.update(localTimeDelta / 1000);
 };
+
+var TWEEN_FACTOR = 1.5;
+var TWEEN_EXPO_FACTOR = 4;
+function tween(from, to, startTime, duration, easing){
+	var now = Date.now();
+	var t = (now-startTime) / duration;
+	t = Math.max(0,Math.min(1,t));
+	
+	if(typeof(easing) != "undefined"){
+		switch(easing){
+			
+			case "easeOut":
+				t = Math.pow(t,1/TWEEN_FACTOR);
+				break;
+			case "easeIn":
+				t = Math.pow(t,TWEEN_FACTOR);
+				break;
+			case "easeOutExpo":
+				t = Math.pow(t,1/TWEEN_EXPO_FACTOR);
+				break;
+			case "easeInExpo":
+				t = Math.pow(t,TWEEN_EXPO_FACTOR);
+				break;
+			case "easeOutSine":
+				t = Math.sin(t * Math.PI / 2);
+				break;
+			case "easeInSine":
+				t = Math.sin((t-1) * Math.PI / 2) + 1;
+				break;
+			case "easeInOutSine":
+				t = Math.sin((t-0.5) * Math.PI) / 2 + 0.5;
+				break;
+		}
+	}
+	
+	return from + t*(to-from);
+}

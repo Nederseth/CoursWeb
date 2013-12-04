@@ -8,6 +8,10 @@ var Character = function(){
 	this.positionListenerList = [];
 };
 
+Character.prototype.createSprite = function(id, url, width, height, colCount, rowCount, loop){
+	this.spriteList[id] = new Sprite(id, url, width, height, colCount, rowCount, loop);
+};
+
 Character.prototype.addPositionListener = function(listener){
 	// TODO
 	this.positionListenerList.push(listener);
@@ -15,7 +19,7 @@ Character.prototype.addPositionListener = function(listener){
 
 Character.prototype.setSprite = function(anim, onComplete){
 	this.lastAnimId = anim;
-	var spriteId = anim + "-" + (this.revertDirection?"left":"right");
+	var spriteId = anim ;//+ "-" + (this.revertDirection?"left":"right");
 	//console.log("new anim " + spriteId);
 	if(this.currentSprite != this.spriteList[spriteId]){
 		if(!this.currentSprite || this.currentSprite.loop || this.currentSprite.currentFrame == this.currentSprite.frameCount - 1){
@@ -42,6 +46,23 @@ Character.prototype.setPosition = function(x, y){
 		this.positionListenerList[i](this.x,this.y);
 	}
 };
+
+Character.prototype.render = function(g){
+	//this.moveTo(1000,1000);
+	g.save();
+	
+
+	g.translate(this.x,this.y);
+
+	if(this.currentSprite){
+		//console.log(g);
+		this.currentSprite.render(g, this.revertDirection);	
+	}
+	
+	g.restore();
+	
+};
+
 Character.prototype.moveTo = function(x, y){
 	var self = this;
 	if(this.animHandler){
