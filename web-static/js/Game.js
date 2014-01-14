@@ -60,7 +60,11 @@ var Game = function(){
 		"mob-attack": baseURL + "sprite/attack-1.png&sleep=" + sleep,
 		"mob-death": baseURL + "sprite/death-1.png&sleep=" + sleep
 	}
-	var soundList = {};
+	var baseURL = "/CoursWeb-static/sound/";
+	var soundList = {
+		"music": baseURL + "Kalimba.mp3",
+		"test": baseURL + "test.wav"
+	};
 	
 	this.assetManager = new AssetManager();
 	this.assetManager.startLoading(imageList, soundList);
@@ -122,6 +126,10 @@ Game.prototype.mainLoop = function(){
 	if(this.assetManager.isDoneLoading()){
 		if(!this.loadEndTime){
 			this.loadEndTime = Date.now();
+			var music = this.assetManager.getSound("music");
+			music.loop = true;
+			music.volume = 0.1;
+			//music.play();
 			//console.log(this.globalTime +" = "+ this.localTime);
 		}
 	}

@@ -39,7 +39,35 @@ AssetManager.prototype.loadSound = function(url, id, onload){
 	if(this.sounds[id]){
 		this.assetLoaded();
 	}else{
-		this.soundsToLoad[id] = url;
+		var soundElt = new Audio();
+		soundElt.addEventListener("canplay", function(){
+			delete _this.soundsToLoad[id];
+			_this.assetLoaded();
+		});
+		
+		soundElt.addEventListener("stalled", function(){
+			delete _this.soundsToLoad[id];
+			console.log("error loading " + url);
+			_this.assetLoaded();
+		});
+		var sourceElt = document.createElement("source");
+		sourceElt.src = url;
+		switch(url.substring(url.length - 3)){
+			case "mp3" : 
+				sourceElt.type = "audio/mpeg";
+				break;
+			case "wav" : 
+				sourceElt.type = "audio/wav";
+				break;
+			case "ogg" : 
+				sourceElt.type = "audio/ogg";
+				break;
+		}
+		soundElt.appendChild(sourceElt);
+		document.body.appendChild(soundElt);
+		this.sounds[id] = soundElt;
+		
+		/*this.soundsToLoad[id] = url;
 		var sound = soundManager.createSound({
 			id: id,
 			url: url,
@@ -64,7 +92,7 @@ AssetManager.prototype.loadSound = function(url, id, onload){
 				}
 			});
 		};
-		this.sounds[id] = sound;
+		this.sounds[id] = sound;*/
 	}
 	return this.sounds[id];
 };

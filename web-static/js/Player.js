@@ -1,6 +1,7 @@
 var Player = function(assetManager){
 	var self = this;
 	Character.call(this);
+	this.assetManager = assetManager;
 	
 	this.keyList = {};
 	
@@ -119,10 +120,12 @@ Player.prototype.onKeyDown = function(k){
 	
 	if(k==32){
 		this.setSprite ("attack");
+		var sound = this.assetManager.getSound("test");
 		for(var idx in game.mobList){
 			var distance = Math.sqrt(Math.pow(this.x-game.mobList[idx].x,2)+Math.pow(this.y-game.mobList[idx].y,2));
 			if(distance < 50){
 				game.mobList[idx].setSprite("death");
+				sound.play();
 			}
 		}
 	}
